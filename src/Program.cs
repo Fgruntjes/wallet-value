@@ -48,4 +48,16 @@ foreach (var returnRow in returns.Rows)
 
 AnsiConsole.Write(table);
 
-AnsiConsole.MarkupLine($"Total bought Fiat: [bold]{returns.TotalBoughtFiat}[/]");
+AnsiConsole.MarkupLine($"Estimated fiat spend on bitcoin: [bold]$ {returns.TotalBoughtFiat:0}[/]");
+AnsiConsole.MarkupLine($"Current value: [bold]$ {returns.FiatTotal:0}[/]");
+
+var profit = returns.FiatTotal - returns.TotalBoughtFiat;
+var profitPercentage = profit / returns.TotalBoughtFiat * 100;
+if (profit > 0)
+{
+    AnsiConsole.MarkupLine($"Profit: [bold green]$ {profit:0}[/] (% {profitPercentage:0.00})");
+}
+else
+{
+    AnsiConsole.MarkupLine($"Loss: [bold red]$ {profit:0}[/] (% {profitPercentage:0.00})");
+}

@@ -18,34 +18,33 @@ class WalletReturns
     {
         get
         {
-            decimal moveBuffer = 0;
+            decimal moveBufferSats = 0;
             decimal totalBoughtFiat = 0;
 
             foreach (var row in Rows)
             {
-                var rowFiat = row.Fiat;
-                if (rowFiat > 0)
+                if (row.Sats > 0)
                 {
-                    if (moveBuffer < 0)
+                    if (moveBufferSats < 0)
                     {
-                        if (moveBuffer + rowFiat > 0)
+                        if (moveBufferSats + row.Sats > 0)
                         {
-                            totalBoughtFiat += moveBuffer + rowFiat;
-                            moveBuffer = 0;
+                            totalBoughtFiat += (moveBufferSats + row.Sats) / 100000000 * row.ExchangeRate;
+                            moveBufferSats = 0;
                         }
                         else
                         {
-                            moveBuffer += rowFiat;
+                            moveBufferSats += row.Sats;
                         }
                     }
                     else
                     {
-                        totalBoughtFiat += rowFiat;
+                        totalBoughtFiat += row.Fiat;
                     }
                 }
                 else
                 {
-                    moveBuffer += rowFiat;
+                    moveBufferSats += row.Sats;
                 }
             }
 
